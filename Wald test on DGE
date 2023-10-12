@@ -1,0 +1,39 @@
+library(DESeq2)
+
+setwd("/home/sejyoti/Downloads/fishgut/wald test")
+
+# Read in data 
+counts <- read.csv("Phylum.csv", row.names=1)
+
+# Make metadata
+coldata <- data.frame(
+  condition = c("control","control","control","treated","treated","treated") 
+)
+
+# Create DESeqDataSet
+dds <- DESeqDataSetFromMatrix(countData=counts, 
+                               colData=coldata,
+                               design = ~ condition)
+
+# Run DESeq 
+dds <- DESeq(dds)
+
+# Wald test
+res <- results(dds, name="condition_treated_vs_control")
+summary(res)
+
+# Wald test
+wald_res <- results(dds, name="condition_WG_vs_FG", test="Wald")
+write.csv(wald_res, file="wald_results.csv")
+
+# Run Wald test 
+wald_res <- results(dds, name="condition_WG_vs_FG", test="Wald")
+
+# Get adjusted p-value column
+padj <- wald_res$padj
+
+# Filter for significant genes (adjusted p < 0.05)
+significant_genes <- rownames(wald_res)[padj < 0.05]
+
+# Print gene names
+print(significant_genes)
