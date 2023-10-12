@@ -1,0 +1,18 @@
+# Load libraries
+library(tidyr)
+library(vegan)
+library(ggplot2)
+
+# Set working directory
+setwd("/home/sejyoti/Downloads/fishgut") 
+
+# Read in data 
+data <- read.csv("MRPP.csv")
+
+# Reshape data
+data_long <- tidyr::pivot_longer(data, cols = -1, 
+                                 names_to = "group",
+                                 values_to = "value")
+
+# Run MRPP
+mrpp_out <- vegan::mrpp(data_long$value, data_long$group)
