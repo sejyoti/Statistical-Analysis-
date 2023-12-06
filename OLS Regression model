@@ -1,0 +1,51 @@
+# Load data
+data <- read.csv("data.csv") 
+# Load required package  
+library(lmtest)
+
+# Load data
+
+# OLS model
+
+
+# OLS model 
+model <- lm(gdp ~ pop + cpi + imports + exports,  
+            data = data)
+
+# Model summary
+summary(model)
+
+# R-squared
+rsq <- summary(model)$r.squared
+
+# F-statistic 
+fstat <- summary(model)$fstatistic
+
+# Residual standard error
+sigma <- summary(model)$sigma
+
+# Covariance matrix of coefficients
+vcov <- vcov(model)
+
+# Variance inflation factors
+vif <- car::vif(model)
+
+# Breusch-Pagan test
+bp <- bptest(model) 
+
+# Durbin-Watson test
+dw <- dwtest(residuals(model))
+
+# Extract residuals 
+residuals <- residuals(model)
+
+# Breusch-Pagan test
+bp <- bptest(residuals) 
+# Print results
+cat("R-squared:", rsq, "\n") 
+cat("F-statistic:", fstat, "\n")
+cat("Residual standard error:", sigma, "\n") 
+print(vcov)
+print(vif)
+print(bp)
+print(dw)
